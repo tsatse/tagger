@@ -60,7 +60,6 @@
             var keys,
                 i;
 
-            console.log('walking ' + collection);
             if(collection instanceof Array) {
                 collection.forEach(callback);
             }
