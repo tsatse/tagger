@@ -1,11 +1,11 @@
 describe('tagger', function() {
     var tagger = require('../tagger');
     var collection;
-    describe('tag', function() {
+    describe('tag_all', function() {
         
         it('should successfuly add tags to elements in an array', function() {
             collection = [{}, {}, {}];
-            tagger.tag(collection, ['tag1', 'tag2']);
+            tagger.tag_all(collection, ['tag1', 'tag2']);
             expect(collection[0].tags['tag1']).toBe(true);
             expect(collection[0].tags['tag2']).toBe(true);
             expect(collection[0].tags['tag3']).not.toBe(true);
@@ -17,7 +17,7 @@ describe('tagger', function() {
 
         it('should successfuly add tags to elements in an object', function() {
             collection = {element1: {}, element2: {}, element3: {}};
-            tagger.tag(collection, ['tag1', 'tag2']);
+            tagger.tag_all(collection, ['tag1', 'tag2']);
             expect(collection.element1.tags['tag1']).toBe(true);
             expect(collection.element1.tags['tag2']).toBe(true);
             expect(collection.element1.tags['tag3']).not.toBe(true);

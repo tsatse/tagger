@@ -1,6 +1,6 @@
 (function(root) {
     function definitionFunction() {
-        function _tagElement(tags, element) {
+        function tag(element, tags) {
             if(element.tags === undefined) {
                 element.tags = {};
             }
@@ -9,12 +9,12 @@
             });
         }
 
-        function tag(collection, tags) {
+        function tag_all(collection, tags) {
             var keys,
                 i;
 
             _walk(collection, function(element) {
-                _tagElement(tags, element);
+                tag(element, tags);
             });
         }
 
@@ -57,6 +57,7 @@
 
         return {
             tag: tag,
+            tag_all: tag_all,
             apply: apply
         };
     }
