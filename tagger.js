@@ -1,21 +1,59 @@
 (function(root) {
     function definitionFunction() {
-        function tag(element, tags) {
+        function _setTagValue(element, tags, newValue) {
             if(element.tags === undefined) {
-                element.tags = {};
+                if(newValue !== false) {
+                    element.tags = {};
+                }
+                else {
+                    return;
+                }
             }
-            tags.forEach(function(tag) {
-                element.tags[tag] = true;
+            if(!(tags instanceof Array)) {
+                tags = [tags];
+            }
+            tags.forEach(function(tag, index, array) {
+                if(typeof newValue === 'function') {
+                    element.tags[tag] = newValue(element.tags, tag);
+                }
+                else {
+                    element.tags[tag] = newValue;
+                }
             });
         }
 
-        function tag_all(collection, tags) {
+        function toggleTag(element, tags) {
+            _setTagValue(element, tags, function(elementTags, tagName) {return !elementTags[tagName];});
+        }
+
+        function tag(element, tags) {
+            _setTagValue(element, tags, true);
+        }
+
+        function unTag(element, tags) {
+            _setTagValue(element, tags, false);
+        }
+
+        function _forAll(collection, tags, action, condition) {
             var keys,
                 i;
-
             _walk(collection, function(element) {
-                tag(element, tags);
+                if(typeof condition !== 'function' || condition(element)) {
+                    action(element, tags);
+                }
             });
+        }
+
+        function tagAll(collection, tags, condition) {
+            _forAll(collection, tags, tag, condition);
+        }
+
+        function unTagAll(collection, tags, condition) {
+            _forAll(collection, tags, unTag, condition);
+        }
+
+        function toggleAll(collection, tags, condition) {
+            _forAll(collection, tags, toggleTag, condition);
         }
 
         function _walk(collection, callback) {
@@ -57,7 +95,11 @@
 
         return {
             tag: tag,
-            tag_all: tag_all,
+            unTag: unTag,
+            toggleTag: toggleTag,
+            tagAll: tagAll,
+            unTagAll: unTagAll,
+            toggleAll: toggleAll,
             apply: apply
         };
     }
@@ -68,6 +110,6 @@
         module.exports = definitionFunction();
     }
     else {
-        root.yajefa = definitionFunction();
+        root.tagger = definitionFunction();
     }
 })(this);
